@@ -6,9 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main{
 
@@ -24,22 +27,23 @@ public class Main{
                 System.out.println(corpusText);
                 repoFiles.add(corpusText);
             } 
-            //System.out.println(repoFiles);
 
-            ArrayList<String> allWords = new ArrayList<>();
+            Map <String, Wordtable> allWordsTable = new HashMap<>();
             for(File corpusText : repoFiles){
-                readCorpus(allWords,corpusText);
+                ArrayList<String> textWords = new ArrayList<>();
+                readCorpus(textWords,corpusText);
+                int size = textWords.size();
+                for(int i = 0 ; i < (size-1) ; i++){
+                    if (!allWordsTable.containsKey(textWords.get(i))){
+                        Wordtable newWordTable = new Wordtable(textWords.get(i));
+                        allWordsTable.put(textWords.get(i),newWordTable);
+                        newWordTable.putNextWord(textWords.get(i+1));
+                    } else {
+                        allWordsTable.get(textWords.get(i)).putNextWord(textWords.get(i+1));
+                    }
+                }
             }
-            System.out.println(allWords);
-            
-
-            Map<Map<String , Integer>,Integer> nextWordDist = new HashMap<>();
-
-
-
-
-
-
+            System.out.print(allWordsTable);
 
         } else {
             System.out.println("Usage: <directory_name>");
@@ -50,14 +54,14 @@ public class Main{
     // Input for readCorpus{
     // Assume wouldn't is wouldnt,and is a word unique from would i.e. ignore contractions
     // Assume "strip all punctions from a word", and "-" implies that right-and-three-quarters is one word
-    public static String[] punc = new String[]{".",",",":","!","?","-","(",")","{","}","\'","\"","/","’","…","“"};
+    public static String[] punc = new String[]{".",",",":","!","?","-","(",")","{","}","\'","\"","/","’","…","“",";"};
     public static int puncSize = punc.length;
     // Assume number is not a word
     public static String[] num = new String[]{"1","2","3","4","5","6","7","8","9","0"};
     public static int numSize = num.length;
     //}
 
-    public static void readCorpus(ArrayList<String> allWords,  File f){
+    public static void readCorpus(ArrayList<String> textWords,  File f){
 
         try{
             FileReader fr = new FileReader(f);
@@ -74,10 +78,9 @@ public class Main{
                 }
                 String[] words = line.split("\\s+");
                 for(String word : words){
-                    allWords.add(word);
+                    textWords.add(word);
                 }
             }
-
             br.close();
             fr.close();
         } catch(IOException IOerr){
@@ -86,23 +89,5 @@ public class Main{
 
     }
 
-
-
-
-}
-// dirname: C:\Users\ftc_b\GIT\TFIP\SDFD10\day10_sdf_assets-main\sdf_assessment_assets\task02\seuss
 //end of class
-// C:\\Users\\ftc_b\\GIT\\TFIP\\SDFD10\\day10_sdf_assets-main\\sdf_assessment_assets\\task02\\seuss\\cat_in_the_hat.txt
-// "C:\\Users\\ftc_b\\GIT\\TFIP\\SDFD10\\day10_sdf_assets-main\\sdf_assessment_assets\\task02\\seuss\\fox_in_socks.txt";
-// "C:\\Users\\ftc_b\\GIT\\TFIP\\SDFD10\\day10_sdf_assets-main\\sdf_assessment_assets\\task02\\seuss\\happy_birthday_to_you.txt";
-// "C:\\Users\\ftc_b\\GIT\\TFIP\\SDFD10\\day10_sdf_assets-main\\sdf_assessment_assets\\task02\\seuss\\oh_the_places_youll_go.txt";
-
-//problem strings
-// But you…You - becomes you you
-//You'll be on y our way up! - spelling error
-
-// code for testing
-// Path p = Paths.get(test);
-// File testFile = p.toFile();
-// readCorpus(allWords,testFile);
-// public static final String  test = "C:\\Users\\ftc_b\\GIT\\TFIP\\SDFD10\\day10_sdf_assets-main\\sdf_assessment_assets\\task02\\seuss\\happy_birthday_to_you - Copy.txt";
+}
