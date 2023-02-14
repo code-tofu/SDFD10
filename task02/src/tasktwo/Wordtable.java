@@ -22,15 +22,19 @@ public class Wordtable {
 
     @Override
     public String toString() {
-        return "Wordtable[" + nextWordTable + "] Total:" + Integer.toString(this.totalNextWords()) + "\n";
+        return this.nextWordTable + "TOTAL:" + Integer.toString(this.gettotalNextWords()) + "\n" ;
     }
 
-    public int totalNextWords(){
+    public int gettotalNextWords(){
         int total = 0;
-        for (var entry : nextWordTable.entrySet()) {
-            total += entry.getValue();
+        for (String key : this.nextWordTable.keySet()) {
+            total += this.nextWordTable.get(key);
         }
         return total;
+    }
+
+    public Map<String, Integer> getNextWordTable() {
+        return nextWordTable;
     }
 
     
