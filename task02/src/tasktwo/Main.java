@@ -36,7 +36,7 @@ public class Main{
                 repoFiles.add(corpusText);
             } 
 
-            //Populate All Words Table
+            //Populate All Words Table from each corpusttext in repo
             Map <String, Wordtable> allWordsTable = new HashMap<>();
             for(File corpusText : repoFiles){
                 ArrayList<String> textWords = new ArrayList<>();

@@ -12,6 +12,7 @@ Assessment for SDF Day 10
   that…Why - that why
 - ignore spelling error e.g.
   You'll be on y our way up!
+- Assume "’" U+2019 to be standard ASCII "'"
 
 # NOTES
 
